@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sunday Paper — Early Access</title>
+<meta name="description" content="Issue 01 drops soon. Subscribe for the early-access password.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600&family=Caveat:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="locked">
+
+<main class="locked">
+
+  <!-- countdown -->
+  <section class="locked__count">
+    <p class="kicker locked__count-label">Issue 01 Drops</p>
+    <div class="countdown" id="countdown">
+      <div class="countdown__unit"><span class="countdown__num" id="cdDays">00</span><span class="countdown__lbl">Day</span></div>
+      <div class="countdown__unit"><span class="countdown__num" id="cdHours">00</span><span class="countdown__lbl">Hours</span></div>
+      <div class="countdown__unit"><span class="countdown__num" id="cdMins">00</span><span class="countdown__lbl">Min</span></div>
+      <div class="countdown__unit"><span class="countdown__num" id="cdSecs">00</span><span class="countdown__lbl">Sec</span></div>
+    </div>
+    <p class="locked__count-note">Drop date and time to be confirmed <em>[confirm]</em></p>
+  </section>
+
+  <!-- campaign image -->
+  <section class="locked__image">
+    <div id="lockedImage"></div>
+    <a class="locked__login" href="#" id="ownerLogin">Store owner? Login</a>
+  </section>
+
+  <!-- signup panel -->
+  <section class="locked__panel">
+    <h1 class="block-head locked__head">Early<br>Access</h1>
+    <p class="locked__copy">Subscribe and we will send you the early-access password one hour before the drop.</p>
+
+    <form class="stack-form" id="earlyForm" novalidate>
+      <label class="visually-hidden" for="earlyEmail">Email address</label>
+      <input type="email" id="earlyEmail" placeholder="EMAIL ADDRESS" autocomplete="email" required>
+      <label class="visually-hidden" for="earlyPhone">Phone number</label>
+      <input type="tel" id="earlyPhone" placeholder="PHONE NUMBER (OPTIONAL)" autocomplete="tel">
+      <button class="btn btn--solid" type="submit">Subscribe</button>
+    </form>
+    <p class="form-msg" id="earlyMsg" role="status"></p>
+
+    <p class="locked__fine">Email for the password, texts for the drop reminder only. Unsubscribe any time. Message rates may apply <em>[confirm]</em>.</p>
+
+    <div class="locked__foot">
+      <span class="locked__wordmark">Sunday Paper</span>
+      <span class="script">good news</span>
+    </div>
+    <p class="locked__socials">
+      <a href="https://instagram.com/sundaypaper_clo" target="_blank" rel="noopener">@sundaypaper_clo</a>
+      <a href="https://tiktok.com/@sundaypaper_co" target="_blank" rel="noopener">@sundaypaper_co</a>
+      <a href="index.html">Preview the store</a>
+    </p>
+  </section>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>
