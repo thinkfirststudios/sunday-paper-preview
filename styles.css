@@ -627,3 +627,22 @@ body[data-page=locked]{background:var(--paper)}
   *,*::before,*::after{transition-duration:.01ms !important;animation-duration:.01ms !important}
   html{scroll-behavior:auto}
 }
+
+/* ---------- classified ad tile (front page "New Issue" row) ---------- */
+.tile__ad{
+  position:relative;aspect-ratio:3 / 4;margin-bottom:14px;border:var(--rule);
+  outline:1px solid var(--ink);outline-offset:-5px;           /* double rule, like a boxed ad */
+  display:flex;flex-direction:column;justify-content:center;gap:14px;padding:24px 22px;
+  transition:background var(--fade),color var(--fade);
+}
+.tile__ad:hover{background:var(--ink);color:var(--cream)}
+.tile__ad:hover .text-link{border-color:var(--cream)}
+.tile__ad-head{font-size:clamp(28px,2.6vw,42px)}
+.tile__ad-rule{height:1px;background:currentColor;width:48px}
+.tile__ad-copy{font-size:13px;line-height:1.6;max-width:24ch}
+.tile__ad .text-link{align-self:flex-start}
+@media (max-width:860px){
+  .tile__ad{padding:16px 14px;gap:10px}
+  .tile__ad-head{font-size:clamp(20px,6vw,28px)}
+  .tile__ad-copy{font-size:11px}
+}

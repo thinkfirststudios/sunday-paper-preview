@@ -331,17 +331,37 @@ function tile(p) {
   </article>`;
 }
 
-function grid(list) {
-  if (!list.length) return `<p class="grid-empty">Nothing in this section yet. <a class="text-link" href="#/shop">See everything</a></p>`;
+/* `extras` are non-product tiles (e.g. the classified ad) appended after the products */
+function grid(list, extras = []) {
+  if (!list.length && !extras.length) return `<p class="grid-empty">Nothing in this section yet. <a class="text-link" href="#/shop">See everything</a></p>`;
   /* pad the last row so the column rules close cleanly — 4-up on desktop,
      2-up on phones (the extra desktop-only fillers hide under 860px) */
-  const need4 = (4 - (list.length % 4)) % 4;
-  const need2 = (2 - (list.length % 2)) % 2;
+  const count = list.length + extras.length;
+  const need4 = (4 - (count % 4)) % 4;
+  const need2 = (2 - (count % 2)) % 2;
   let fillers = '';
   for (let i = 0; i < need4; i++) {
     fillers += `<div class="tile tile--filler${i < need2 ? '' : ' tile--filler-desktop'}" aria-hidden="true"></div>`;
   }
-  return `<div class="grid">${list.map(tile).join('')}${fillers}</div>`;
+  return `<div class="grid">${list.map(tile).join('')}${extras.join('')}${fillers}</div>`;
+}
+
+const hasPhotos = p => !!(p.photos && Object.keys(p.photos).length);
+
+/* A house ad set like a newspaper classified. Fills the front-page row when fewer than
+   four products have been photographed, and points at the real early-access signup. */
+function classifiedTile() {
+  return `<article class="tile tile--ad">
+    <a class="tile__ad" href="locked.html">
+      <p class="kicker">Classified</p>
+      <p class="block-head tile__ad-head">Get the<br>next issue<br>first.</p>
+      <p class="tile__ad-rule"></p>
+      <p class="tile__ad-copy">Early access by email or text, one hour before each drop.</p>
+      <span class="text-link">Sign up</span>
+    </a>
+    <p class="tile__name">Early Access</p>
+    <p class="tile__price">Free</p>
+  </article>`;
 }
 
 /* ============================================================
@@ -386,7 +406,10 @@ function viewHome() {
 
   <section class="wrap section">
     <div class="section-front"><span>New Issue</span></div>
-    ${grid(PRODUCTS.filter(p => p.isNew).slice(0, 4))}
+    ${(() => {
+      const shot = PRODUCTS.filter(p => p.isNew && hasPhotos(p)).slice(0, 4);
+      return grid(shot, shot.length < 4 ? [classifiedTile()] : []);
+    })()}
     <p style="text-align:center;padding-top:34px"><a class="text-link" href="#/shop">Shop all</a></p>
   </section>
 
