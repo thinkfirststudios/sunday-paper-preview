@@ -346,6 +346,19 @@ function grid(list, extras = []) {
   return `<div class="grid">${list.map(tile).join('')}${extras.join('')}${fillers}</div>`;
 }
 
+/* Wire-service tape: the brand's own lines, running once across the page. */
+function wire() {
+  const lines = ['The content you consume matters', 'Spread good news', 'Keep going',
+    'Issue 01', 'Take the road less traveled', "Your story isn't over", "Don't leave before the good part"];
+  const run = lines.map(l => `<span>${esc(l)}</span><span class="wire__dot" aria-hidden="true">■</span>`).join('');
+  return `<div class="wire" role="presentation">
+    <div class="wire__label">Wire</div>
+    <div class="wire__window"><div class="wire__track">
+      <div class="wire__run">${run}</div><div class="wire__run" aria-hidden="true">${run}</div>
+    </div></div>
+  </div>`;
+}
+
 const hasPhotos = p => !!(p.photos && Object.keys(p.photos).length);
 
 /* A house ad set like a newspaper classified. Fills the front-page row when fewer than
@@ -413,10 +426,12 @@ function viewHome() {
     <p style="text-align:center;padding-top:34px"><a class="text-link" href="#/shop">Shop all</a></p>
   </section>
 
+  ${wire()}
+
   <section class="editorial">
     <div class="editorial__inner">
       <p class="kicker editorial__kicker">Editorial</p>
-      <p class="block-head editorial__head">Good news<br>still exists.<br>Spread it.</p>
+      <p class="block-head editorial__head"><span class="ln">Good news</span><span class="ln">still exists.</span><span class="ln">Spread it.</span></p>
     </div>
   </section>`;
 }
@@ -489,7 +504,7 @@ function viewCollection() {
   <div class="wrap">
     <div class="collection-head">
       <p class="kicker">Issue 01</p>
-      <h1 class="block-head">${esc(meta.title)}</h1>
+      <h1 class="block-head stamp">${esc(meta.title)}</h1>
       <p class="measure">${esc(meta.blurb)}</p>
     </div>
     <div class="section-front"><span>The Classifieds</span></div>
@@ -561,7 +576,7 @@ function viewAbout() {
   return `
   <article class="opinion">
     <p class="kicker">Opinion</p>
-    <h1 class="block-head opinion__head">A Paper For<br>The Good Part</h1>
+    <h1 class="block-head opinion__head stamp">A Paper For<br>The Good Part</h1>
     <div class="opinion__dateline">
       <span class="dateline-text">Sunday Paper</span>
       <span class="dateline-text">Vol. 1 — No. 1</span>
@@ -577,7 +592,7 @@ function viewAbout() {
       <p>If you wear one of these and somebody reads it across a parking lot, that is our whole distribution model. Spread good news.</p>
     </div>
 
-    <p class="pullquote">The content you consume matters</p>
+    <p class="pullquote stamp">The content you consume matters</p>
 
     <figure>
       ${imgSlot(IMAGES.aboutPortrait, { alt: 'Sunday Paper' })}
@@ -612,6 +627,37 @@ function viewNotFound() {
 }
 
 /* ============================================================
+   MOTION — one-time print/press effects. Everything is gated behind
+   the `motion` class on <html>, which is only added when JS runs and
+   the visitor has not asked for reduced motion. Elements are hidden
+   only once they are registered with the observer, so anything that
+   misses registration simply shows as normal.
+   ============================================================ */
+const MOTION = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches)
+  && 'IntersectionObserver' in window;
+if (MOTION) document.documentElement.classList.add('motion');
+
+const REVEAL = '.stamp, .press, .section-front, .grid, .lead__body, .editorial__head';
+let revealObserver = null;
+function initReveals(root = document) {
+  if (!MOTION) return;
+  if (!revealObserver) {
+    revealObserver = new IntersectionObserver(entries => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        en.target.classList.add('is-in');
+        revealObserver.unobserve(en.target);
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -5% 0px' });
+  }
+  root.querySelectorAll(REVEAL).forEach(el => {
+    if (el.classList.contains('rv')) return;
+    el.classList.add('rv');
+    revealObserver.observe(el);
+  });
+}
+
+/* ============================================================
    ROUTER
    ============================================================ */
 function route() {
@@ -632,6 +678,7 @@ function route() {
   else html = viewNotFound();
 
   view.innerHTML = html;
+  initReveals(view);
   markActiveNav();
   closePanels();
   window.scrollTo(0, 0);
@@ -648,6 +695,9 @@ function refreshCollection() {
   const view = $('#view');
   if (!view || !$('.filter-bar', view)) return;
   view.innerHTML = viewCollection();
+  initReveals(view);
+  /* a filter or sort change should only re-deal the grid, not replay the heading */
+  view.querySelectorAll('.stamp, .section-front').forEach(el => el.classList.add('is-in'));
 }
 
 /* ============================================================
@@ -822,13 +872,23 @@ function startCountdown() {
   const box = $('#countdown');
   if (!box) return;
   const pad = n => String(Math.max(0, n)).padStart(2, '0');
+  /* swap a numeral like hand-set type: only animate the ones that changed */
+  const set = (sel, val) => {
+    const el = $(sel);
+    if (el.textContent === val) return;
+    el.textContent = val;
+    if (!MOTION) return;
+    el.classList.remove('flip');
+    void el.offsetWidth;
+    el.classList.add('flip');
+  };
   const tick = () => {
     const diff = DROP.date.getTime() - Date.now();
     const s = Math.max(0, Math.floor(diff / 1000));
-    $('#cdDays').textContent = pad(Math.floor(s / 86400));
-    $('#cdHours').textContent = pad(Math.floor(s / 3600) % 24);
-    $('#cdMins').textContent = pad(Math.floor(s / 60) % 60);
-    $('#cdSecs').textContent = pad(s % 60);
+    set('#cdDays', pad(Math.floor(s / 86400)));
+    set('#cdHours', pad(Math.floor(s / 3600) % 24));
+    set('#cdMins', pad(Math.floor(s / 60) % 60));
+    set('#cdSecs', pad(s % 60));
   };
   tick();
   setInterval(tick, 1000);
@@ -1072,6 +1132,7 @@ function boot() {
   if (document.body.dataset.page === 'locked') {
     const slot = $('#lockedImage');
     if (slot) slot.innerHTML = imgSlot(IMAGES.lockedCampaign, { eager: true, alt: 'Sunday Paper campaign' });
+    initReveals(document);
     startCountdown();
     wireEarlyAccess();
     return;

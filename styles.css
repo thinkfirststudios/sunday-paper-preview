@@ -223,6 +223,7 @@ input.is-error{border-color:#8a2318;color:#8a2318}
   text-transform:uppercase;letter-spacing:.015em;padding:18px 0 14px;white-space:nowrap;
 }
 .masthead__tag{
+  display:table;margin:0 auto;   /* shrink to the text so the typewriter reveal starts at the first letter */
   font-family:var(--font-news);font-size:clamp(11px,1.5vw,15px);letter-spacing:.34em;
   text-transform:uppercase;font-variant:small-caps;padding-top:16px;
 }
@@ -277,12 +278,13 @@ input.is-error{border-color:#8a2318;color:#8a2318}
 }
 .press .image-slot img{
   mix-blend-mode:multiply;
-  filter:sepia(.28) saturate(.78) contrast(1.12) brightness(1.04);
+  /* same function order as the "undeveloped" state in the motion block, so it can animate */
+  filter:sepia(.28) saturate(.78) contrast(1.12) brightness(1.04) grayscale(0);
 }
 .press .image-slot::before{
   content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
   background-image:
-    radial-gradient(circle,rgba(17,17,17,.85) 0 .75px,transparent 1.15px),
+    radial-gradient(circle closest-side,rgba(17,17,17,.85) 0 50%,transparent 78%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
   background-size:3px 3px,180px 180px;
   mix-blend-mode:multiply;opacity:.2;
@@ -646,3 +648,99 @@ body[data-page=locked]{background:var(--paper)}
   .tile__ad-head{font-size:clamp(20px,6vw,28px)}
   .tile__ad-copy{font-size:11px}
 }
+
+/* ============================================================
+   MOTION — newspaper print effects
+   Everything below only applies when <html> has the `motion` class
+   (JS on, reduced motion not requested). Elements only hide once JS
+   has registered them (`.rv`), and each effect plays once.
+   ============================================================ */
+
+/* ink-stamp: presses onto the page with a little blur, like a fresh impression */
+.motion .masthead__word{animation:sp-stamp 700ms cubic-bezier(.2,.9,.3,1) both}
+.motion .masthead__rule{animation:sp-rule 800ms cubic-bezier(.6,0,.2,1) 120ms both}
+.motion .masthead__tag{animation:sp-type 1500ms steps(31,end) 650ms both}
+
+@keyframes sp-stamp{
+  0%{opacity:0;transform:scale(1.07);filter:blur(5px)}
+  60%{opacity:1;filter:blur(.6px)}
+  100%{opacity:1;transform:none;filter:none}
+}
+@keyframes sp-rule{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes sp-type{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+
+.motion .stamp.rv{transition:opacity 520ms ease-out,transform 620ms cubic-bezier(.2,.9,.3,1),filter 620ms ease-out}
+.motion .stamp.rv:not(.is-in){opacity:0;transform:scale(1.06);filter:blur(4px)}
+
+/* photos develop: coarse black-and-white halftone settling into the finished print */
+.motion .press.rv .image-slot img{transition:filter 1600ms ease-out,opacity 900ms ease-out}
+.motion .press.rv .image-slot::before{transition:background-size 1600ms cubic-bezier(.3,.6,.2,1),opacity 1600ms ease-out}
+.motion .press.rv:not(.is-in) .image-slot img{
+  opacity:.35;filter:sepia(0) saturate(0) contrast(1.7) brightness(1.12) grayscale(1);
+}
+.motion .press.rv:not(.is-in) .image-slot::before{background-size:11px 11px,180px 180px;opacity:.55}
+
+/* section fronts: the rules run out from the label */
+.motion .section-front.rv::before{transform-origin:right center}
+.motion .section-front.rv::after{transform-origin:left center}
+.motion .section-front.rv::before,.motion .section-front.rv::after{transition:transform 900ms cubic-bezier(.6,0,.2,1)}
+.motion .section-front.rv span{transition:opacity 500ms ease-out 200ms}
+.motion .section-front.rv:not(.is-in)::before,.motion .section-front.rv:not(.is-in)::after{transform:scaleX(0)}
+.motion .section-front.rv:not(.is-in) span{opacity:0}
+
+/* product grids: tiles come off the press one after another */
+.motion .grid.rv > .tile{transition:opacity 560ms ease-out,transform 560ms cubic-bezier(.2,.9,.3,1)}
+.motion .grid.rv:not(.is-in) > .tile{opacity:0;transform:translateY(14px)}
+.motion .grid.rv > .tile:nth-child(2){transition-delay:90ms}
+.motion .grid.rv > .tile:nth-child(3){transition-delay:180ms}
+.motion .grid.rv > .tile:nth-child(4){transition-delay:270ms}
+.motion .grid.rv > .tile:nth-child(5){transition-delay:360ms}
+.motion .grid.rv > .tile:nth-child(6){transition-delay:450ms}
+.motion .grid.rv > .tile:nth-child(n+7){transition-delay:540ms}
+
+/* lead story: headline stamps, the print lines set one by one, KEEP GOING lands last */
+.motion .lead__body.rv .lead__head,.motion .lead__body.rv .lead__keep{
+  transition:opacity 520ms ease-out,transform 620ms cubic-bezier(.2,.9,.3,1),filter 620ms ease-out}
+.motion .lead__body.rv .lead__keep{transition-delay:780ms}
+.motion .lead__body.rv:not(.is-in) .lead__head,.motion .lead__body.rv:not(.is-in) .lead__keep{
+  opacity:0;transform:scale(1.06);filter:blur(4px)}
+.motion .lead__body.rv .lead__list li{transition:opacity 380ms ease-out,transform 380ms ease-out}
+.motion .lead__body.rv:not(.is-in) .lead__list li{opacity:0;transform:translateY(6px)}
+.motion .lead__body.rv .lead__list li:nth-child(1){transition-delay:220ms}
+.motion .lead__body.rv .lead__list li:nth-child(2){transition-delay:300ms}
+.motion .lead__body.rv .lead__list li:nth-child(3){transition-delay:380ms}
+.motion .lead__body.rv .lead__list li:nth-child(4){transition-delay:460ms}
+.motion .lead__body.rv .lead__list li:nth-child(5){transition-delay:540ms}
+.motion .lead__body.rv .lead__list li:nth-child(6){transition-delay:620ms}
+.motion .lead__body.rv .lead__signoff::after{transform-origin:left center;transition:transform 900ms cubic-bezier(.6,0,.2,1) 1000ms}
+.motion .lead__body.rv:not(.is-in) .lead__signoff::after{transform:scaleX(0)}
+
+/* editorial band: each line stamped in turn */
+.editorial__head .ln{display:block}
+.motion .editorial__head.rv .ln{transition:opacity 520ms ease-out,transform 640ms cubic-bezier(.2,.9,.3,1),filter 640ms ease-out}
+.motion .editorial__head.rv .ln:nth-child(2){transition-delay:260ms}
+.motion .editorial__head.rv .ln:nth-child(3){transition-delay:520ms}
+.motion .editorial__head.rv:not(.is-in) .ln{opacity:0;transform:scale(1.08);filter:blur(5px)}
+
+/* countdown: numerals drop into place like hand-set type */
+.motion .countdown__num.flip{animation:sp-flip 260ms cubic-bezier(.2,.9,.3,1)}
+@keyframes sp-flip{from{opacity:0;transform:translateY(-40%)}to{opacity:1;transform:none}}
+
+/* ---------- wire-service ticker ---------- */
+.wire{
+  display:flex;align-items:stretch;border-top:var(--rule);border-bottom:var(--rule);
+  outline:1px solid var(--ink);outline-offset:-4px;          /* double rule, like tape off a teleprinter */
+  background:var(--paper);overflow:hidden;
+}
+.wire__label{
+  flex:0 0 auto;display:flex;align-items:center;padding:0 18px;background:var(--ink);color:var(--cream);
+  font-family:var(--font-news);font-size:12px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;
+}
+.wire__window{flex:1;overflow:hidden;padding:14px 0}
+.wire__track{display:flex;width:max-content}
+.wire__run{display:flex;align-items:center;gap:22px;padding-right:22px;white-space:nowrap;
+  font-family:var(--font-label);font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase}
+.wire__dot{font-size:7px;color:var(--forest)}
+.motion .wire__track{animation:sp-wire 60s linear infinite}
+.wire:hover .wire__track{animation-play-state:paused}
+@keyframes sp-wire{to{transform:translateX(-50%)}}
