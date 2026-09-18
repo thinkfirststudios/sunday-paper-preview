@@ -233,7 +233,7 @@ input.is-error{border-color:#8a2318;color:#8a2318}
 /* lead story */
 .lead{border-bottom:var(--rule)}
 /* full-bleed band, same width as the colorway rack strip */
-.lead__media{border-bottom:var(--rule);background:#fff}
+.lead__media{border-bottom:var(--rule);background:var(--paper)}
 .lead__media .image-slot::after{border:0}
 .lead__body{
   max-width:var(--maxw);margin:0 auto;padding:44px var(--gut) 48px;
@@ -260,6 +260,33 @@ input.is-error{border-color:#8a2318;color:#8a2318}
 
 /* colorway rack */
 .rack{border-bottom:var(--rule);padding:0}
+
+/* ---------- editorial bands: edge to edge, but capped so a wide monitor
+   does not turn the page into one giant photo ---------- */
+.lead__media .image-slot{aspect-ratio:auto;height:clamp(220px,34vw,540px)}
+.lead__media .image-slot img{object-fit:contain}
+
+/* ---------- newsprint treatment (editorial photos only; product shots stay true-colour) ----------
+   faded ink, a halftone dot screen and a little paper grain. Multiply blending prints the
+   photo onto the page colour, so white studio backgrounds become newsprint. */
+.press .image-slot{background:var(--paper)}
+/* on very wide monitors, stop the bands growing and set them in the page like a newspaper photo */
+@media (min-width:1601px){
+  .campaign .image-slot,.lead__media .image-slot{max-width:1600px;margin-inline:auto}
+  .campaign .image-slot::after,.lead__media .image-slot::after{border:var(--rule);border-top:0;border-bottom:0}
+}
+.press .image-slot img{
+  mix-blend-mode:multiply;
+  filter:sepia(.28) saturate(.78) contrast(1.12) brightness(1.04);
+}
+.press .image-slot::before{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background-image:
+    radial-gradient(circle,rgba(17,17,17,.85) 0 .75px,transparent 1.15px),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:3px 3px,180px 180px;
+  mix-blend-mode:multiply;opacity:.2;
+}
 .rack__cap{
   text-align:center;padding:14px 16px;border-top:var(--rule);
   font-family:var(--font-label);font-size:10px;letter-spacing:.2em;text-transform:uppercase;
@@ -529,7 +556,7 @@ body[data-page=locked]{background:var(--paper)}
 .locked__login{
   position:absolute;left:0;right:0;bottom:0;text-align:center;padding:10px;
   font-family:var(--font-label);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
-  background:rgba(244,241,232,.9);
+  background:rgba(244,241,232,.9);z-index:2;
 }
 .locked__panel{padding:34px 20px 48px}
 .locked__head{font-size:clamp(52px,16vw,88px);margin-bottom:18px}
@@ -556,8 +583,11 @@ body[data-page=locked]{background:var(--paper)}
   .nav{display:none}
   .masthead{padding:34px 0 20px}
   .masthead__word{font-size:clamp(38px,13.5vw,86px)}
-  /* a 21:9 band is too short on a phone — use a taller crop of the same photo */
-  .lead__media .image-slot{aspect-ratio:16 / 10}
+  /* a 21:9 band is too short on a phone — use a taller frame of the same photo */
+  .lead__media .image-slot{height:auto;aspect-ratio:16 / 10}
+  .lead__media .image-slot img{object-fit:cover}
+  .campaign .image-slot{aspect-ratio:16 / 9}
+  .campaign .image-slot img{object-position:62% 50%}
   .lead__body{grid-template-columns:1fr;padding:28px 16px 34px}
   .lead__col + .lead__col{border-left:0;padding-left:0}
   .lead__list{grid-template-columns:1fr}

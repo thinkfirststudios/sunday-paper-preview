@@ -25,9 +25,9 @@ const DROP = {
 const IMAGES = {
   campaignHero: {
     id: 'campaign-hero',
-    caption: 'Campaign / front page hero',
-    ratio: '16/9',
-    px: '2400 × 1350',
+    caption: 'Campaign / front page hero — full rack, all five colorways',
+    ratio: '3/1',
+    px: '2400 × 800',
     src: 'assets/photos/campaign-hero.jpg'
   },
   leadStory: {
@@ -36,13 +36,6 @@ const IMAGES = {
     ratio: '21/9',
     px: '2400 × 1029',
     src: 'assets/photos/good-part-hoodie-grey-pair-wide.jpg'
-  },
-  rack: {
-    id: 'rack-all-colorways',
-    caption: 'Rack — all five colorways',
-    ratio: '21/9',
-    px: '1400 × 600',
-    src: 'assets/photos/rack-colorways.jpg'
   },
   aboutPortrait: {
     id: 'about-portrait',
@@ -369,11 +362,14 @@ function viewHome() {
     </div>
   </section>
 
-  <section class="campaign">${imgSlot(IMAGES.campaignHero, { eager: true, alt: 'Sunday Paper campaign' })}</section>
+  <section class="campaign press">
+    ${imgSlot(IMAGES.campaignHero, { eager: true, alt: 'The first drop in all five colorways' })}
+    <p class="rack__cap">The first drop in five colorways — ${esc(colorNames)}</p>
+  </section>
   <div class="campaign__link"><a class="text-link" href="#/product/good-part-hoodie">Shop the first drop</a></div>
 
   <section class="lead">
-    <div class="lead__media">${imgSlot(IMAGES.leadStory, { color: 'Heather Grey' })}</div>
+    <div class="lead__media press">${imgSlot(IMAGES.leadStory, { color: 'Heather Grey' })}</div>
     <div class="lead__body">
       <div class="lead__col">
         <p class="kicker lead__kicker">Front Page — Issue 01</p>
@@ -386,11 +382,6 @@ function viewHome() {
         <p><a class="text-link" href="#/product/good-part-hoodie">Buy the hoodie — ${money(hoodie.price)}</a></p>
       </div>
     </div>
-  </section>
-
-  <section class="rack">
-    ${imgSlot(IMAGES.rack, { alt: 'The first drop in every colorway' })}
-    <p class="rack__cap">The first drop in five colorways — ${esc(colorNames)}</p>
   </section>
 
   <section class="wrap section">
