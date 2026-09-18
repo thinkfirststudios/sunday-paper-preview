@@ -705,14 +705,14 @@ function closePanels() {
   if (!d) return;
   d.classList.remove('is-open');
   d.setAttribute('aria-hidden', 'true');
-  ['#searchOverlay', '#accountPanel'].forEach(s => {
+  ['#searchOverlay'].forEach(s => {
     const el = $(s);
     el.classList.remove('is-open');
     el.setAttribute('aria-hidden', 'true');
   });
   const mob = $('#mobileNav');
   if (mob) mob.hidden = true;
-  ['#cartToggle', '#searchToggle', '#accountToggle', '#menuToggle'].forEach(s => $(s).setAttribute('aria-expanded', 'false'));
+  ['#cartToggle', '#searchToggle', '#menuToggle'].forEach(s => $(s).setAttribute('aria-expanded', 'false'));
   setScrim(false);
   closeDropdowns();
 }
@@ -763,23 +763,6 @@ function wireNewsletter() {
   });
 }
 
-function wireAccount() {
-  const form = $('#accountForm');
-  if (!form) return;
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    const email = $('#accountEmail');
-    const msg = $('#accountMsg');
-    if (!EMAIL_RE.test(email.value.trim())) {
-      email.classList.add('is-error');
-      showMsg(msg, 'Enter a valid email address', false);
-      return;
-    }
-    email.classList.remove('is-error');
-    form.hidden = true;
-    showMsg(msg, 'Check your email for the code. In the live store the platform sends it — nothing is stored in this prototype.', true);
-  });
-}
 
 function wireEarlyAccess() {
   const form = $('#earlyForm');
@@ -868,8 +851,6 @@ function wireEvents() {
   on('#cartClose', closePanels);
   on('#searchToggle', () => toggleOverlay('#searchOverlay', '#searchToggle'));
   on('#searchClose', closePanels);
-  on('#accountToggle', () => toggleOverlay('#accountPanel', '#accountToggle'));
-  on('#accountClose', closePanels);
   on('#scrim', closePanels);
   on('#menuToggle', () => {
     const mob = $('#mobileNav');
@@ -1080,7 +1061,6 @@ function boot() {
 
   wireEvents();
   wireNewsletter();
-  wireAccount();
   wireSearch();
   renderCart();
   window.addEventListener('hashchange', route);

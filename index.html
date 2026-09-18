@@ -36,9 +36,6 @@
       <button class="icon-btn" id="searchToggle" aria-label="Search" aria-expanded="false">
         <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6"></circle><line x1="13.5" y1="13.5" x2="18" y2="18"></line></svg>
       </button>
-      <button class="icon-btn" id="accountToggle" aria-label="Account" aria-expanded="false">
-        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="7" r="3.5"></circle><path d="M3.5 18c0-3.6 2.9-5.5 6.5-5.5s6.5 1.9 6.5 5.5"></path></svg>
-      </button>
       <button class="icon-btn icon-btn--cart" id="cartToggle" aria-label="Bag" aria-expanded="false">
         <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12l-1 12H5L4 6z"></path><path d="M7.5 8V5.5a2.5 2.5 0 0 1 5 0V8"></path></svg>
         <span class="cart-count" id="cartCount" aria-hidden="true">0</span>
@@ -150,23 +147,6 @@
   </div>
 </div>
 
-<!-- ============================ ACCOUNT ============================ -->
-<div class="overlay overlay--narrow" id="accountPanel" aria-hidden="true">
-  <div class="overlay__inner">
-    <div class="overlay__head">
-      <p class="kicker">Account</p>
-      <button class="text-btn" id="accountClose" aria-label="Close account">Close</button>
-    </div>
-    <p class="overlay__note" style="margin:0 0 14px">No password. Enter your email and a six-digit code is sent to you.</p>
-    <form id="accountForm" class="stack-form" novalidate>
-      <label class="visually-hidden" for="accountEmail">Email address</label>
-      <input type="email" id="accountEmail" placeholder="EMAIL ADDRESS" autocomplete="email" required>
-      <button class="btn btn--solid" type="submit">Email me a code</button>
-    </form>
-    <p class="form-msg" id="accountMsg" role="status"></p>
-    <p class="overlay__note">You do not need an account to order — checkout works as a guest. Accounts are for order history and returns. <em>[confirm: handled by the store platform at launch]</em></p>
-  </div>
-</div>
 
 <div class="scrim" id="scrim" hidden></div>
 
