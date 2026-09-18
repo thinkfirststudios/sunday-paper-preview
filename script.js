@@ -32,10 +32,10 @@ const IMAGES = {
   },
   leadStory: {
     id: 'lead-story',
-    caption: "Product — good part hoodie back / grey",
-    ratio: '3/4',
-    px: '1200 × 1600',
-    src: 'assets/photos/good-part-hoodie-grey-back.jpg'
+    caption: "Product — good part hoodie front + back / grey",
+    ratio: '21/9',
+    px: '2400 × 1029',
+    src: 'assets/photos/good-part-hoodie-grey-pair-wide.jpg'
   },
   rack: {
     id: 'rack-all-colorways',
@@ -375,12 +375,16 @@ function viewHome() {
   <section class="lead">
     <div class="lead__media">${imgSlot(IMAGES.leadStory, { color: 'Heather Grey' })}</div>
     <div class="lead__body">
-      <p class="kicker lead__kicker">Front Page — Issue 01</p>
-      <h2 class="block-head lead__head">Don't Leave<br>Before The<br>Good Part</h2>
-      <ul class="lead__list">${subLines.map(l => `<li>${esc(l)}</li>`).join('')}</ul>
-      <p class="block-head lead__keep">Keep Going</p>
-      <p class="lead__signoff">Spread Good News</p>
-      <p><a class="text-link" href="#/product/good-part-hoodie">Buy the hoodie — ${money(hoodie.price)}</a></p>
+      <div class="lead__col">
+        <p class="kicker lead__kicker">Front Page — Issue 01</p>
+        <h2 class="block-head lead__head">Don't Leave<br>Before The<br>Good Part</h2>
+      </div>
+      <div class="lead__col">
+        <ul class="lead__list">${subLines.map(l => `<li>${esc(l)}</li>`).join('')}</ul>
+        <p class="block-head lead__keep">Keep Going</p>
+        <p class="lead__signoff">Spread Good News</p>
+        <p><a class="text-link" href="#/product/good-part-hoodie">Buy the hoodie — ${money(hoodie.price)}</a></p>
+      </div>
     </div>
   </section>
 
