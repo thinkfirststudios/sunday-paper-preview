@@ -14,13 +14,57 @@
 </head>
 <body>
 
+<!-- ============================ LOADER ============================ -->
+<!-- First visit at "/" only. Counts up while the splash photo and product shots load,
+     then the five colorways sweep up like a curtain and reveal the splash. -->
+<div class="loader" id="loader" hidden aria-hidden="true">
+  <div class="loader__inner">
+    <p class="wordmark loader__mark"><span>Sunday Paper</span></p>
+    <div class="loader__bar"><span id="loaderFill"></span></div>
+    <p class="loader__count"><span id="loaderPct">0</span></p>
+  </div>
+  <div class="loader__curtain">
+    <span style="--c:var(--royal)"></span><span style="--c:var(--burgundy)"></span><span style="--c:var(--black)"></span><span style="--c:var(--orange)"></span><span style="--c:var(--heather)"></span>
+  </div>
+</div>
+
 <!-- ============================ SPLASH ============================ -->
 <!-- Shown on first load at "/". SHOP fades it out and reveals the store underneath. -->
 <div class="splash" id="splash" hidden>
   <div class="splash__media" id="splashMedia"></div>
+  <div class="splash__wash" aria-hidden="true"></div>
+  <div class="splash__shade" aria-hidden="true"></div>
+
   <!-- Fixed-height wordmark: swap the span for <img src="assets/logo-white.svg" alt="Sunday Paper"> -->
   <p class="splash__mark wordmark" aria-label="Sunday Paper"><span>Sunday Paper</span></p>
-  <button class="splash__btn" id="splashShop" type="button">Shop</button>
+
+  <h1 class="splash__title" aria-label="Don't Leave Before The Good Part">
+    <span class="splash__line"><span>Don't leave</span></span>
+    <span class="splash__line"><span>before the</span></span>
+    <span class="splash__line"><span>good part</span></span>
+  </h1>
+
+  <button class="splash__btn" id="splashShop" type="button"><span>Shop</span></button>
+
+  <div class="splash__drop" aria-hidden="true">
+    <p>First drop — 5 colorways</p>
+    <div class="splash__chips">
+      <i style="--c:var(--royal)"></i><i style="--c:var(--burgundy)"></i><i style="--c:var(--black)"></i><i style="--c:var(--orange)"></i><i style="--c:var(--heather)"></i>
+    </div>
+  </div>
+
+  <div class="splash__ticker" aria-hidden="true">
+    <div class="splash__track">
+      <span>The content you consume matters</span><span>Spread good news</span><span>Keep going</span>
+      <span>The content you consume matters</span><span>Spread good news</span><span>Keep going</span>
+      <span>The content you consume matters</span><span>Spread good news</span><span>Keep going</span>
+      <span>The content you consume matters</span><span>Spread good news</span><span>Keep going</span>
+      <span>The content you consume matters</span><span>Spread good news</span><span>Keep going</span>
+      <span>The content you consume matters</span><span>Spread good news</span><span>Keep going</span>
+      <span>The content you consume matters</span><span>Spread good news</span><span>Keep going</span>
+      <span>The content you consume matters</span><span>Spread good news</span><span>Keep going</span>
+    </div>
+  </div>
 </div>
 
 <div class="site" id="site">

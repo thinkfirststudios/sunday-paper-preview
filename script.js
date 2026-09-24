@@ -17,15 +17,31 @@ const PRODUCTS = [
     price: 80,                                 // placeholder [confirm]
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     colorways: [
-      { id: 'royal-blue',   name: 'Royal Blue',   swatch: '#1f4fd6', soldOut: [],
-        images: { front: '', back: '', detail: '' } },
-      { id: 'burgundy',     name: 'Burgundy',     swatch: '#8e1b2f', soldOut: [],
-        images: { front: '', back: '', detail: '' } },
+      { id: 'royal-blue',   name: 'Royal Blue',   swatch: '#1036aa', soldOut: [],
+        images: {  // recolored from the grey shots by tools/recolor_colorways.py; stand-ins until real photos [confirm]
+          front:  'assets/photos/good-part-hoodie-royal-blue-front.jpg',
+          back:   'assets/photos/good-part-hoodie-royal-blue-back.jpg',
+          detail: 'assets/photos/good-part-hoodie-royal-blue-detail.jpg'
+        } },
+      { id: 'burgundy',     name: 'Burgundy',     swatch: '#801426', soldOut: [],
+        images: {  // recolored from the grey shots by tools/recolor_colorways.py; stand-ins until real photos [confirm]
+          front:  'assets/photos/good-part-hoodie-burgundy-front.jpg',
+          back:   'assets/photos/good-part-hoodie-burgundy-back.jpg',
+          detail: 'assets/photos/good-part-hoodie-burgundy-detail.jpg'
+        } },
       { id: 'black',        name: 'Black',        swatch: '#111111', soldOut: [],
-        images: { front: '', back: '', detail: '' } },
+        images: {  // recolored from the grey shots by tools/recolor_colorways.py; stand-ins until real photos [confirm]
+          front:  'assets/photos/good-part-hoodie-black-front.jpg',
+          back:   'assets/photos/good-part-hoodie-black-back.jpg',
+          detail: 'assets/photos/good-part-hoodie-black-detail.jpg'
+        } },
       // XXL marked sold out only to demo the struck-through state. [confirm]
-      { id: 'orange',       name: 'Orange',       swatch: '#d9621e', soldOut: ['XXL'],
-        images: { front: '', back: '', detail: '' } },
+      { id: 'orange',       name: 'Orange',       swatch: '#d4541c', soldOut: ['XXL'],
+        images: {  // recolored from the grey shots by tools/recolor_colorways.py; stand-ins until real photos [confirm]
+          front:  'assets/photos/good-part-hoodie-orange-front.jpg',
+          back:   'assets/photos/good-part-hoodie-orange-back.jpg',
+          detail: 'assets/photos/good-part-hoodie-orange-detail.jpg'
+        } },
       { id: 'heather-grey', name: 'Heather Grey', swatch: '#9a9a97', soldOut: [],
         images: {
           front:  'assets/photos/good-part-hoodie-grey-front.jpg',
@@ -136,10 +152,12 @@ function allTiles() {
 }
 
 function tileHTML({ p, c }) {
+  // hover swaps to the back view only when there is a back photo; two captions crossfading just blur together
+  const back = c.images.back ? slot(p, c, 'back', { cover: false }) : '';
   return `
     <li>
       <a class="tile" href="#/product/${p.id}/${c.id}">
-        <div class="tile__media" aria-hidden="true">${slot(p, c, 'front', { cover: false })}${slot(p, c, 'back', { cover: false })}</div>
+        <div class="tile__media" aria-hidden="true">${slot(p, c, 'front', { cover: false })}${back}</div>
         <p class="tile__name">${esc(tileTitle(p, c))}</p>
         <p class="tile__price">${money(p.price)}</p>
       </a>
@@ -319,6 +337,55 @@ function showSplash() {
   splash.hidden = false;
   site.inert = true;
   document.body.classList.add('is-locked');
+}
+
+/* ---------------------------------------------------------
+   Loader — counts up while the splash photo and the grid's
+   front shots load, then the colorway curtain reveals the splash.
+   --------------------------------------------------------- */
+const LOADER_MIN_MS = 1400;     // never flash by faster than this
+const LOADER_MAX_MS = 6000;     // never hold a slow connection longer than this
+const CURTAIN_MS = 1300;        // matches the curtain animation in styles.css
+const CURTAIN_STAGGER_MS = 280; // delay on the last panel
+const CURTAIN_COVERED_MS = 780; // every panel is up and covering at this point
+
+function preload(srcs) {
+  let done = 0;
+  const jobs = srcs.filter(Boolean).map((src) => new Promise((resolve) => {
+    const img = new Image();
+    img.onload = img.onerror = () => { done += 1; resolve(); };
+    img.src = src;
+  }));
+  if (document.fonts && document.fonts.ready) jobs.push(document.fonts.ready.then(() => { done += 1; }));
+  return { total: jobs.length, progress: () => done / Math.max(jobs.length, 1) };
+}
+
+function runLoader(onReveal) {
+  const loader = $('#loader');
+  if (reducedMotion()) { onReveal(); return; }
+
+  loader.hidden = false;
+  const fill = $('#loaderFill');
+  const pct = $('#loaderPct');
+  const job = preload([SPLASH_SRC, ...allTiles().map(({ c }) => c.images.front)]);
+  const start = performance.now();
+  let shown = 0;
+
+  function tick(now) {
+    const elapsed = now - start;
+    const real = elapsed > LOADER_MAX_MS ? 1 : job.progress();
+    const target = Math.min(real, elapsed / LOADER_MIN_MS);
+    shown += (target - shown) * 0.18;
+    if (target === 1 && shown > 0.995) shown = 1;
+    fill.style.transform = `scaleX(${shown})`;
+    pct.textContent = String(Math.round(shown * 100));
+    if (shown < 1) { requestAnimationFrame(tick); return; }
+
+    loader.classList.add('is-leaving');
+    window.setTimeout(() => { loader.classList.add('is-clear'); onReveal(); }, CURTAIN_COVERED_MS);
+    window.setTimeout(() => { loader.hidden = true; }, CURTAIN_MS + CURTAIN_STAGGER_MS + 50);
+  }
+  requestAnimationFrame(tick);
 }
 
 function leaveSplash() {
@@ -501,4 +568,7 @@ renderCart();
 route();
 
 const bareEntry = !location.hash || location.hash === '#' || location.hash === '#/';
-if (bareEntry) showSplash();
+if (bareEntry) {
+  showSplash();
+  runLoader(() => splash.classList.add('is-in'));
+}
