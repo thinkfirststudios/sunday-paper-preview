@@ -2,153 +2,104 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sunday Paper — The content you consume matters</title>
-<meta name="description" content="Sunday Paper. A clothing label that prints good news. The content you consume matters.">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sunday Paper</title>
+<meta name="description" content="Sunday Paper. The content you consume matters. First drop: Don't Leave Before The Good Part.">
 <meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#111111">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600&family=Caveat:wght@400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body data-page="store">
+<body>
 
-<a class="skip-link" href="#view">Skip to content</a>
+<!-- ============================ SPLASH ============================ -->
+<!-- Shown on first load at "/". SHOP fades it out and reveals the store underneath. -->
+<div class="splash" id="splash" hidden>
+  <div class="splash__media" id="splashMedia"></div>
+  <!-- Fixed-height wordmark: swap the span for <img src="assets/logo-white.svg" alt="Sunday Paper"> -->
+  <p class="splash__mark wordmark" aria-label="Sunday Paper"><span>Sunday Paper</span></p>
+  <button class="splash__btn" id="splashShop" type="button">Shop</button>
+</div>
 
-<!-- ============================ HEADER ============================ -->
-<header class="bar" id="siteHeader">
-  <div class="bar__inner">
-    <a class="lockup" href="#/" aria-label="Sunday Paper — front page">
-      <!-- Fixed-height lockup: swap this span for <img src="assets/logo.svg" alt="Sunday Paper"> -->
-      <span class="lockup__type">Sunday Paper</span>
-    </a>
+<div class="site" id="site">
 
-    <nav class="nav" id="primaryNav" aria-label="Primary">
-      <a href="#/shop/new">New Issue</a>
-      <a href="#/shop">Shop All</a>
-      <a href="#/shop/hoodies">Hoodies</a>
-      <a href="#/shop/tees">Tees</a>
-      <a href="#/shop/headwear">Headwear</a>
-      <a href="#/about">About</a>
+  <a class="skip-link" href="#view">Skip to content</a>
+
+  <!-- ============================ ANNOUNCEMENT ============================ -->
+  <div class="announce">First drop — available now</div>
+
+  <!-- ============================ HEADER ============================ -->
+  <header class="header">
+    <div class="header__inner">
+      <!-- Fixed-height wordmark: swap the span for <img src="assets/logo.svg" alt="Sunday Paper"> -->
+      <a class="wordmark header__mark" href="#/shop" aria-label="Sunday Paper — shop"><span>Sunday Paper</span></a>
+
+      <nav class="header__nav" aria-label="Primary">
+        <a href="#/shop" data-nav="shop">Shop</a>
+        <a href="#/about" data-nav="about">About</a>
+      </nav>
+
+      <div class="header__util">
+        <button class="text-btn" id="searchToggle" type="button" aria-expanded="false" aria-controls="search">Search</button>
+        <button class="text-btn" id="cartToggle" type="button" aria-expanded="false" aria-controls="cart">Cart (<span id="cartCount">0</span>)</button>
+      </div>
+    </div>
+
+    <!-- search drops down under the header -->
+    <div class="search" id="search" hidden>
+      <div class="search__inner">
+        <label class="visually-hidden" for="searchInput">Search products</label>
+        <input class="search__input" type="search" id="searchInput" placeholder="Search" autocomplete="off">
+        <button class="text-btn" id="searchClose" type="button">Close</button>
+      </div>
+      <div class="search__results" id="searchResults" aria-live="polite"></div>
+    </div>
+  </header>
+
+  <!-- ============================ VIEW ============================ -->
+  <main id="view" tabindex="-1"></main>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="footer">
+    <nav class="footer__links" aria-label="Footer">
+      <a href="#/info/shipping">Shipping</a>
+      <a href="#/info/returns">Returns</a>
+      <a href="#/info/contact">Contact</a>
+      <a href="#/info/terms">Terms</a>
+      <a href="#/info/privacy">Privacy</a>
+      <a href="https://instagram.com/sundaypaper_clo" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://tiktok.com/@sundaypaper_co" target="_blank" rel="noopener">TikTok</a>
     </nav>
 
-    <div class="utility">
-      <button class="icon-btn" id="searchToggle" aria-label="Search" aria-expanded="false">
-        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="9" cy="9" r="6"></circle><line x1="13.5" y1="13.5" x2="18" y2="18"></line></svg>
+    <form class="signup" id="signup" novalidate>
+      <label class="visually-hidden" for="signupEmail">Email address</label>
+      <input type="email" id="signupEmail" placeholder="Email" autocomplete="email" required>
+      <button type="submit" aria-label="Sign up">
+        <svg viewBox="0 0 24 12" aria-hidden="true"><line x1="0" y1="6" x2="22" y2="6"></line><polyline points="17,1 22,6 17,11"></polyline></svg>
       </button>
-      <button class="icon-btn icon-btn--cart" id="cartToggle" aria-label="Bag" aria-expanded="false">
-        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12l-1 12H5L4 6z"></path><path d="M7.5 8V5.5a2.5 2.5 0 0 1 5 0V8"></path></svg>
-        <span class="cart-count" id="cartCount" aria-hidden="true">0</span>
-      </button>
-      <button class="icon-btn icon-btn--menu" id="menuToggle" aria-label="Menu" aria-expanded="false">
-        <svg viewBox="0 0 20 20" aria-hidden="true"><line x1="2" y1="6" x2="18" y2="6"></line><line x1="2" y1="14" x2="18" y2="14"></line></svg>
-      </button>
-    </div>
-  </div>
-</header>
+    </form>
+    <p class="signup__msg" id="signupMsg" role="status"></p>
+  </footer>
 
-<!-- ============================ DATELINE ============================ -->
-<div class="dateline" id="dateline">
-  <span class="dateline__cell">Vol. 1 — No. 1</span>
-  <span class="dateline__cell" id="datelineDate">&nbsp;</span>
-  <span class="dateline__cell">Spread Good News</span>
 </div>
-
-<!-- mobile nav panel -->
-<nav class="mobile-nav" id="mobileNav" aria-label="Mobile" hidden>
-  <a href="#/shop/new">New Issue</a>
-  <a href="#/shop">Shop All</a>
-  <a href="#/shop/hoodies">Hoodies</a>
-  <a href="#/shop/tees">Tees</a>
-  <a href="#/shop/headwear">Headwear</a>
-  <a href="#/about">About</a>
-  <a href="locked.html">Early Access</a>
-</nav>
-
-<!-- ============================ VIEW ============================ -->
-<main id="view" tabindex="-1"></main>
-
-<!-- ============================ FOOTER ============================ -->
-<footer class="footer">
-  <div class="footer__top">
-    <div class="footer__signup">
-      <p class="kicker">Get the next issue first</p>
-      <p class="footer__note">One email per issue. No noise.</p>
-      <form class="inline-form" id="newsletterForm" novalidate>
-        <label class="visually-hidden" for="newsletterEmail">Email address</label>
-        <input type="email" id="newsletterEmail" name="email" placeholder="EMAIL ADDRESS" autocomplete="email" required>
-        <button type="submit" aria-label="Subscribe">
-          <svg viewBox="0 0 24 16" aria-hidden="true"><line x1="0" y1="8" x2="22" y2="8"></line><polyline points="15,1 22,8 15,15"></polyline></svg>
-        </button>
-      </form>
-      <p class="form-msg" id="newsletterMsg" role="status"></p>
-    </div>
-
-    <div class="footer__cols">
-      <div class="footer__col">
-        <p class="kicker">Customer Service</p>
-        <a href="#/info/help">Help</a>
-        <a href="#/info/shipping">Orders &amp; Shipping</a>
-        <a href="#/info/returns">Returns</a>
-        <a href="#/info/contact">Contact</a>
-      </div>
-      <div class="footer__col">
-        <p class="kicker">The Paper</p>
-        <a href="#/about">About</a>
-        <a href="locked.html">Early Access</a>
-        <a href="#/info/terms">Terms</a>
-        <a href="#/info/privacy">Privacy</a>
-      </div>
-      <div class="footer__col">
-        <p class="kicker">Follow</p>
-        <a href="https://instagram.com/sundaypaper_clo" target="_blank" rel="noopener">Instagram @sundaypaper_clo</a>
-        <a href="https://tiktok.com/@sundaypaper_co" target="_blank" rel="noopener">TikTok @sundaypaper_co</a>
-        <a href="#/info/contact">sundaypaper.co</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="footer__legal">
-    <span>© <span id="yearNow">2026</span> Sunday Paper — sundaypaper.co</span>
-    <span>Prototype. Product names, prices, policies and dates shown are placeholders <em>[confirm]</em>.</span>
-  </div>
-
-  <div class="footer__mark" aria-hidden="true">
-    <span class="footer__wordmark">Sunday Paper</span>
-    <span class="script footer__script">good news</span>
-  </div>
-</footer>
 
 <!-- ============================ CART DRAWER ============================ -->
-<aside class="drawer" id="cartDrawer" aria-label="Bag" aria-hidden="true">
-  <div class="drawer__head">
-    <p class="kicker">Your Bag (<span id="drawerCount">0</span>)</p>
-    <button class="text-btn" id="cartClose" aria-label="Close bag">Close</button>
+<div class="scrim" id="scrim" hidden></div>
+<aside class="cart" id="cart" aria-label="Cart" aria-hidden="true" inert>
+  <div class="cart__head">
+    <p>Cart (<span id="cartCountDrawer">0</span>)</p>
+    <button class="text-btn" id="cartClose" type="button">Close</button>
   </div>
-  <div class="drawer__body" id="cartItems"></div>
-  <div class="drawer__foot">
-    <div class="drawer__row"><span class="label">Subtotal</span><span class="label" id="cartSubtotal">$0</span></div>
-    <p class="drawer__note">Shipping and tax calculated at checkout. Free shipping over $100 <em>[confirm]</em>.</p>
-    <button class="btn btn--solid" id="checkoutBtn">Checkout</button>
-    <p class="script drawer__script">good news</p>
+  <div class="cart__items" id="cartItems"></div>
+  <div class="cart__foot">
+    <div class="cart__row"><span>Subtotal</span><span id="cartSubtotal">$0</span></div>
+    <p class="cart__note">Shipping and tax at checkout.</p>
+    <button class="btn" id="checkoutBtn" type="button">Checkout</button>
+    <p class="cart__msg" id="checkoutMsg" role="status"></p>
   </div>
 </aside>
-
-<!-- ============================ SEARCH ============================ -->
-<div class="overlay" id="searchOverlay" aria-hidden="true">
-  <div class="overlay__inner">
-    <div class="overlay__head">
-      <p class="kicker">Search the archive</p>
-      <button class="text-btn" id="searchClose" aria-label="Close search">Close</button>
-    </div>
-    <label class="visually-hidden" for="searchInput">Search products</label>
-    <input type="search" id="searchInput" placeholder="WHAT ARE YOU LOOKING FOR?" autocomplete="off">
-    <div id="searchResults" class="search-results"></div>
-  </div>
-</div>
-
-
-<div class="scrim" id="scrim" hidden></div>
 
 <script src="script.js"></script>
 </body>
