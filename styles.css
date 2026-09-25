@@ -228,8 +228,10 @@ button { cursor: pointer; }
 .splash__shade {
   position: absolute; inset: 0;
   background:
+    /* black fade up from the bottom, solid behind the ticker */
+    linear-gradient(0deg, #000 0%, rgba(0, 0, 0, 0.92) 12%, rgba(0, 0, 0, 0.6) 28%, rgba(0, 0, 0, 0.2) 42%, rgba(0, 0, 0, 0) 52%),
     radial-gradient(ellipse 70% 45% at 50% 50%, rgba(0, 0, 0, 0.35), transparent 70%),
-    linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 28%, rgba(0, 0, 0, 0) 58%, rgba(0, 0, 0, 0.75) 100%);
+    linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0) 28%);
 }
 
 .splash__mark {
