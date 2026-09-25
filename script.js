@@ -367,7 +367,11 @@ function runLoader(onReveal) {
   loader.hidden = false;
   const fill = $('#loaderFill');
   const pct = $('#loaderPct');
-  const job = preload([SPLASH_SRC, ...allTiles().map(({ c }) => c.images.front)]);
+  const job = preload([
+    SPLASH_SRC,
+    ...$$('.splash__lineup img').map((img) => img.getAttribute('src')),
+    ...allTiles().map(({ c }) => c.images.front)
+  ]);
   const start = performance.now();
   let shown = 0;
 

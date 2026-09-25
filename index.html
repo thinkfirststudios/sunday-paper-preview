@@ -44,13 +44,21 @@
     <span class="splash__line"><span>good part</span></span>
   </h1>
 
-  <button class="splash__btn" id="splashShop" type="button"><span>Shop</span></button>
+  <button class="splash__btn" id="splashShop" type="button">
+    <span>Shop the drop</span>
+    <svg viewBox="0 0 24 12" aria-hidden="true"><line x1="0" y1="6" x2="22" y2="6"></line><polyline points="17,1 22,6 17,11"></polyline></svg>
+  </button>
 
+  <!-- the product under the button; cutouts made by tools/make_cutouts.py -->
   <div class="splash__drop" aria-hidden="true">
-    <p>First drop — 5 colorways</p>
-    <div class="splash__chips">
-      <i style="--c:var(--royal)"></i><i style="--c:var(--burgundy)"></i><i style="--c:var(--black)"></i><i style="--c:var(--orange)"></i><i style="--c:var(--heather)"></i>
+    <div class="splash__lineup">
+      <img src="assets/photos/cutouts/hoodie-royal-blue.png" alt="">
+      <img src="assets/photos/cutouts/hoodie-burgundy.png" alt="">
+      <img src="assets/photos/cutouts/hoodie-black.png" alt="">
+      <img src="assets/photos/cutouts/hoodie-orange.png" alt="">
+      <img src="assets/photos/cutouts/hoodie-heather-grey.png" alt="">
     </div>
+    <p>The Good Part Hoodie · 5 colorways + cap</p>
   </div>
 
   <div class="splash__ticker" aria-hidden="true">
